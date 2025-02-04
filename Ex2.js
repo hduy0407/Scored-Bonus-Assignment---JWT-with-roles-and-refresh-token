@@ -2,9 +2,10 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
 
+
 const app = express();
 const PORT = 3000;
-const SECRET_KEY = 'mysecretkey';
+const SECRET_KEY = process.env.SECRET_KEY;
 
 app.use(bodyParser.json());
 
@@ -17,18 +18,14 @@ app.post('/login', (req, res) => {
     const { username, password } = req.body;
     if (username === user.username && password === user.password) {
         const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '1h' });
-        res.json({
-            message: 'Login successful!',
-            token
-        });
+        return res.json({token});
     } else {
-        res.status(401).json({ message: 'Invalid username or password' });
+        return res.status(401).json({ message: 'Invalid username or password' });
     }
 });
 
-const tokenMiddleware = function(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+const tokenMiddleware = (req, res, next) => {
+    const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
 
     if (!token) {
         return res.status(401).json({ message: 'Unauthorized' });
@@ -45,8 +42,9 @@ const tokenMiddleware = function(req, res, next) {
 
 app.get('/posts', tokenMiddleware, (req, res) => {
     res.json({message: "Early bird catches the worm"})
-
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-    });
 });
+
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+})
