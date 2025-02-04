@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "name": "bonus-ass",
+  "version": "1.0.0",
+  "description": "JWT with roles and refresh token",
+  "main": "Ex2.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "npm run test"
+  },
+  "author": "",
+  "license": "ISC"
+}
